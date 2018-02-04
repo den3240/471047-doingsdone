@@ -133,21 +133,22 @@ $show_complete_tasks = rand(0, 1);
                 ?>
 
                 <table class="tasks">
-                  <?php foreach ($gifs as $key => $val): ?>
-                    <tr class="tasks__item task task--completed">
+                  <?php foreach ($task_list as $key => $val): ?>
+                    <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed<?php endif; ?>">
                         <td class="task__select">
                             <label class="checkbox task__checkbox">
                                 <input class="checkbox__input visually-hidden" type="checkbox" checked>
-                                <a href="/"><span class="checkbox__text">Сделать главную страницу Дела в порядке</span></a>
+                                <a href="/"><span class="checkbox__text"><?=$val['title']; ?></span></a>
                             </label>
                         </td>
 
                         <td class="task__file">
-                            <a class="download-link" href="#">Home.psd</a>
+                            <a class="download-link" href="#"></a>
                         </td>
 
-                        <td class="task__date"></td>
+                        <td class="task__date"><?=$val['date']; ?></td>
                     </tr>
+                  <?php endforeach; ?>
                 </table>
 
 
