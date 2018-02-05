@@ -107,7 +107,7 @@ $task_list = [
                         <?php while($index < $num_count): ?>
                         <li class="main-navigation__list-item main-navigation__list-item<?php if ($index == 0) :?>--active<?php endif; ?>">
                             <a class="main-navigation__list-item-link" href="#"><?=$categories[$index];?></a>
-                            <span class="main-navigation__list-item-count"><?php echo(task_counting($task_list, $categories[$index])); ?></span>
+                            <span class="main-navigation__list-item-count"><?php echo(task_counting($task_list, $categories[$index])) ?></span>
                         </li>
                         <?php $index = $index + 1; ?>
                         <?php endwhile; ?>
