@@ -2,7 +2,8 @@
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
 
-function task_counting ($task_list = 0, $project_name) {
+function task_counting ($task_list = [], $project_name) {
+  $project_list = [];
   foreach ($task_list as $key => $value) {
     if ($project_name == "Все") {
       $project_list[] = $task_list;
@@ -107,7 +108,7 @@ $task_list = [
                         <?php while($index < $num_count): ?>
                         <li class="main-navigation__list-item main-navigation__list-item<?php if ($index == 0) :?>--active<?php endif; ?>">
                             <a class="main-navigation__list-item-link" href="#"><?=$categories[$index];?></a>
-                            <span class="main-navigation__list-item-count"><?php echo(task_counting($task_list, $categories[$index])) ?></span>
+                            <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $categories[$index]) ?></span>
                         </li>
                         <?php $index = $index + 1; ?>
                         <?php endwhile; ?>
