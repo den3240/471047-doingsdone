@@ -1,6 +1,60 @@
 <?php
 // показывать или нет выполненные задачи
 $show_complete_tasks = rand(0, 1);
+
+function task_counting ($task_list = [], $project_name) {
+  $project_list = [];
+  foreach ($task_list as $key => $value) {
+    if ($project_name == "Все") {
+      $project_list[] = $task_list;
+    } else if ($value['category'] === $project_name) {
+      $project_list[] = $value['category'];
+    }
+  }
+  return count($project_list);
+}
+
+$categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
+
+$task_list = [
+    [
+        'title' => 'Собеседование в IT компании',
+        'date' => '01.06.2018',
+        'category' => $categories[3],
+        'status' => 'Нет'
+    ],
+    [
+        'title' => 'Выполнить тестовое задание',
+        'date' => '25.05.2018',
+        'category' => $categories[3],
+        'status' => 'Нет'
+    ],
+    [
+        'title' => 'Сделать задание первого раздела',
+        'date' => '21.04.2018',
+        'category' => $categories[2],
+        'status' => 'Да'
+    ],
+    [
+        'title' => 'Встреча с другом',
+        'date' => '22.04.2018',
+        'category' => $categories[1],
+        'status' => 'Нет'
+    ],
+    [
+        'title' => 'Купить корм для кота',
+        'date' => 'Нет',
+        'category' => $categories[4],
+        'status' => 'Нет'
+    ],
+    [
+        'title' => 'Заказать пиццу',
+        'date' => 'Нет',
+        'category' => $categories[4],
+        'status' => 'Нет'
+    ]
+];
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
@@ -43,10 +97,10 @@ $show_complete_tasks = rand(0, 1);
             <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>
 
-                <?php $categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
-                $index = 0;
-                $num_count = count($categories);
-                $num = count($categories);
+                <?php
+                  $index = 0;
+                  $num_count = count($categories);
+                  $num = count($categories);
                 ?>
 
                 <nav class="main-navigation">
@@ -54,7 +108,7 @@ $show_complete_tasks = rand(0, 1);
                         <?php while($index < $num_count): ?>
                         <li class="main-navigation__list-item main-navigation__list-item<?php if ($index == 0) :?>--active<?php endif; ?>">
                             <a class="main-navigation__list-item-link" href="#"><?=$categories[$index];?></a>
-                            <span class="main-navigation__list-item-count"><?php print($num); ?></span>
+                            <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $categories[$index]) ?></span>
                         </li>
                         <?php $index = $index + 1; ?>
                         <?php endwhile; ?>
@@ -89,49 +143,6 @@ $show_complete_tasks = rand(0, 1);
                         </a>
                     </label>
                 </div>
-
-                <?php
-
-                $task_list = [
-                    [
-                        'title' => 'Собеседование в IT компании',
-                        'date' => '01.06.2018',
-                        'category' => $categories[3],
-                        'status' => 'Нет'
-                    ],
-                    [
-                        'title' => 'Выполнить тестовое задание',
-                        'date' => '25.05.2018',
-                        'category' => $categories[3],
-                        'status' => 'Нет'
-                    ],
-                    [
-                        'title' => 'Сделать задание первого раздела',
-                        'date' => '21.04.2018',
-                        'category' => $categories[2],
-                        'status' => 'Да'
-                    ],
-                    [
-                        'title' => 'Встреча с другом',
-                        'date' => '22.04.2018',
-                        'category' => $categories[1],
-                        'status' => 'Нет'
-                    ],
-                    [
-                        'title' => 'Купить корм для кота',
-                        'date' => 'Нет',
-                        'category' => $categories[4],
-                        'status' => 'Нет'
-                    ],
-                    [
-                        'title' => 'Заказать пиццу',
-                        'date' => 'Нет',
-                        'category' => $categories[4],
-                        'status' => 'Нет'
-                    ]
-                ];
-
-                ?>
 
                 <table class="tasks">
                   <?php foreach ($task_list as $key => $val): ?>
