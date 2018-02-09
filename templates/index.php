@@ -23,51 +23,9 @@
     </label>
 </div>
 
-<?php
-
-$task_list = [
-    [
-        'title' => 'Собеседование в IT компании',
-        'date' => '01.06.2018',
-        'category' => $categories[3],
-        'status' => 'Нет'
-    ],
-    [
-        'title' => 'Выполнить тестовое задание',
-        'date' => '25.05.2018',
-        'category' => $categories[3],
-        'status' => 'Нет'
-    ],
-    [
-        'title' => 'Сделать задание первого раздела',
-        'date' => '21.04.2018',
-        'category' => $categories[2],
-        'status' => 'Да'
-    ],
-    [
-        'title' => 'Встреча с другом',
-        'date' => '22.04.2018',
-        'category' => $categories[1],
-        'status' => 'Нет'
-    ],
-    [
-        'title' => 'Купить корм для кота',
-        'date' => 'Нет',
-        'category' => $categories[4],
-        'status' => 'Нет'
-    ],
-    [
-        'title' => 'Заказать пиццу',
-        'date' => 'Нет',
-        'category' => $categories[4],
-        'status' => 'Нет'
-    ]
-];
-
-?>
-
 <table class="tasks">
   <?php foreach ($task_list as $key => $val): ?>
+    <?php if(($show_complete_tasks == 1 && $val['status'] === 'Да') || $val['status'] === "Нет"): ?>
     <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
@@ -82,5 +40,6 @@ $task_list = [
 
         <td class="task__date"><?=$val['date']; ?></td>
     </tr>
+    <?php endif; ?>
   <?php endforeach; ?>
 </table>
