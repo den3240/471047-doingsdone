@@ -29,7 +29,7 @@
     <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden" type="checkbox" checked>
+                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($val['status'] === 'Да') :?>checked<?php endif; ?>>
                 <a href="/"><span class="checkbox__text"><?=$val['title']; ?></span></a>
             </label>
         </td>
