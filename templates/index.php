@@ -26,7 +26,7 @@
 <table class="tasks">
   <?php foreach ($task_list as $key => $val): ?>
     <?php
-    date_default_timezone_set("Europe/Kiev");
+    date_default_timezone_set("Europe/Kiev"); 
     $end_date = strtotime($val['date']);
     $curdate = date('d.m.Y');
     $days_left = floor(($end_date - strtotime($curdate)) / 86400);
