@@ -25,14 +25,8 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $val): ?>
-    <?php
-    date_default_timezone_set("Europe/Kiev"); 
-    $end_date = strtotime($val['date']);
-    $curdate = date('d.m.Y');
-    $days_left = floor(($end_date - strtotime($curdate)) / 86400);
-    ?>
     <?php if(($show_complete_tasks == 1 && $val['status'] === 'Да') || $val['status'] === "Нет"): ?>
-    <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed <?php elseif($days_left <= 1 && $val['date']) :?>task--important<?php endif; ?>">
+    <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed <?php elseif(date_check($val['date'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($val['status'] === 'Да') :?>checked<?php endif; ?>>
