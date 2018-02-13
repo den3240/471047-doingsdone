@@ -48,7 +48,7 @@
                     <ul class="main-navigation__list">
                         <?php while($index < $category_count): ?>
                         <li class="main-navigation__list-item <?php if ($index == 0) :?>main-navigation__list-item--active<?php endif; ?>">
-                            <a class="main-navigation__list-item-link" href="index.php?category_id=<?=$index;?>"><?=$categories[$index];?></a>
+                            <a class="main-navigation__list-item-link" href="index.php?category_id=<?=$index;?>"><?=htmlspecialchars($categories[$index]);?></a>
                             <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $categories[$index]) ?></span>
                         </li>
                         <?php $index = $index + 1; ?>

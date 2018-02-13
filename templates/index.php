@@ -30,7 +30,7 @@
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['status'] === 'Да') :?>checked<?php endif; ?>>
-                <span class="checkbox__text"><?=$task['title']; ?></span>
+                <span class="checkbox__text"><?= htmlspecialchars($task['title']); ?></span>
             </label>
         </td>
 
@@ -43,7 +43,7 @@
             if(!$task['date']) {
               echo "Нет";
             }else{
-              echo $task['date'];
+              echo htmlspecialchars($task['date']);
             }
           ?>
         </td>

@@ -56,7 +56,7 @@
   $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks]);
 
   if (isset($_GET['category_id'])) {
-  	$category_id = $_GET['category_id'];
+  	(int)$category_id = $_GET['category_id'];
 
     if (!isset($categories[$category_id])) {
       http_response_code(404);

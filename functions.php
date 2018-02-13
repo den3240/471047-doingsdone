@@ -6,7 +6,7 @@ function include_template($path, $data) {
   }
   extract($data);
   ob_start();
-  require_once $path;
+  require $path;
 
   return ob_get_clean();
 }
