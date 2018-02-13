@@ -24,8 +24,7 @@
 </div>
 
 <table class="tasks">
-  <?php if (isset($task)): ?>
-  <?php // foreach ($task_list as $key => $task): ?>
+  <?php foreach ($task_list as $key => $task): ?>
     <?php if(($show_complete_tasks == 1 && $task['status'] === 'Да') || $task['status'] === "Нет"): ?>
     <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['date'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
@@ -50,8 +49,5 @@
         </td>
     </tr>
     <?php endif; ?>
-  <?php // endforeach; ?>
-  <?php else: ?>
-      <h1>404</h1>
-  <?php endif; ?>
+  <?php endforeach; ?>
 </table>

@@ -51,27 +51,27 @@
       ]
   ];
 
-  $task = null;
+  $filtered_tasks = null;
+
+  $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks]);
 
   if (isset($_GET['category_id'])) {
   	$category_id = $_GET['category_id'];
 
-  	foreach ($task_list as $key => $val) {
-  		if ($categories[$category_id] == "Все") {
-        $task = $task_list;
-      }elseif ($val['category'] == $categories[$category_id]) {
-  			$task = $val;
-  		}
-  	}
-
+    if (!isset($categories[$category_id])) {
+      http_response_code(404);
+      $page_content = include_template('templates/error.php', ['error_text' => "404"]);
+    } else {
+      if ($categories[$category_id] != "Все") {
+        $filter_category = $categories[$category_id];
+        $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
+          return $element['category'] == $filter_category;
+        });
+        $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks]);
+      }
+    }
   }
 
-  if (!$task) {
-  	http_response_code(404);
-  }
-
-
-  $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks, 'task' => $task]);
 
   $layout_content = include_template('templates/layout.php', [
   	'content' => $page_content,
