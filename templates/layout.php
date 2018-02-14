@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body><!--class="overlay"-->
+<body>
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
@@ -47,7 +47,7 @@
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php while($index < $category_count): ?>
-                        <li class="main-navigation__list-item <?php if ($index == 0) :?>main-navigation__list-item--active<?php endif; ?>">
+                        <li class="main-navigation__list-item <?php if ($_GET['category_id'] == $index) :?>main-navigation__list-item--active<?php endif; ?>">
                             <a class="main-navigation__list-item-link" href="index.php?category_id=<?=$index;?>"><?=htmlspecialchars($categories[$index]);?></a>
                             <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $categories[$index]) ?></span>
                         </li>
