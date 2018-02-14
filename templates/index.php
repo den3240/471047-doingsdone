@@ -24,13 +24,13 @@
 </div>
 
 <table class="tasks">
-  <?php foreach ($task_list as $key => $val): ?>
-    <?php if(($show_complete_tasks == 1 && $val['status'] === 'Да') || $val['status'] === "Нет"): ?>
-    <tr class="tasks__item task <?php if ($val['status'] === 'Да') :?>task--completed <?php elseif(date_check($val['date'])) :?>task--important<?php endif; ?>">
+  <?php foreach ($task_list as $key => $task): ?>
+    <?php if(($show_complete_tasks == 1 && $task['status'] === 'Да') || $task['status'] === "Нет"): ?>
+    <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['date'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($val['status'] === 'Да') :?>checked<?php endif; ?>>
-                <span class="checkbox__text"><?=$val['title']; ?></span>
+                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['status'] === 'Да') :?>checked<?php endif; ?>>
+                <span class="checkbox__text"><?= htmlspecialchars($task['title']); ?></span>
             </label>
         </td>
 
@@ -40,10 +40,10 @@
 
         <td class="task__date">
           <?php
-            if(!$val['date']) {
+            if(!$task['date']) {
               echo "Нет";
             }else{
-              echo $val['date'];
+              echo htmlspecialchars($task['date']);
             }
           ?>
         </td>
