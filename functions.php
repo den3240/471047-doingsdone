@@ -37,5 +37,4 @@ function date_check($date) {
   }
 }
 
-
 ?>
