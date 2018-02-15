@@ -51,6 +51,35 @@
       ]
   ];
 
+  if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    $task = $_POST;
+    $task_name = $_POST['name'];
+    $task_category = $_POST['project'];
+    $task_date = date("d.m.Y", strtotime($_POST['date']));
+
+    $required = ['name','project','date'];
+    $errors = [];
+    foreach ($required as $key) {
+      if (empty($_POST[$key])) {
+        $errors[$key] = 'Заполните это поле';
+      }
+   }
+
+   if (isset($_FILES['preview']['name'])) {
+      $tmp_name = $_FILES['preview']['tmp_name'];
+      $path = $_FILES['preview']['name'];
+
+      move_uploaded_file($tmp_name, '' . $path);
+   }
+
+   if (count($errors)) {
+     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors]);
+   } else {
+     array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
+   }
+  }
+
   $filtered_tasks = null;
 
   $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks]);
@@ -72,14 +101,13 @@
     }
   }
 
-
   $layout_content = include_template('templates/layout.php', [
   	'content' => $page_content,
   	'categories' => $categories,
   	'title' => 'Дела в Порядке',
-    'task_list' => $task_list
+    'task_list' => $task_list,
+    'task_add' => $task_add
   ]);
 
   print($layout_content);
-
 ?>

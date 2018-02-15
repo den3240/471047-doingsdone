@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add'])) : ?>class="overlay"<?php endif; ?>>
-<?php if (isset($_GET['add'])) {require 'registration_form.php';}?>
+<body <?php if (isset($_GET['add']) || isset($task_add)) : ?>class="overlay"<?php endif; ?> >
+<?php if (isset($_GET['add'])) {require 'task_add.php';}else{echo $task_add;}?>
+
 <h1 class="visually-hidden">Дела в порядке</h1>
 
 <div class="page-wrapper">
