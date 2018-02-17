@@ -26,7 +26,11 @@
       <select class="form__input form__input--select" name="project" id="project">
         <option value="">Выбрать проект</option>
         <?php while($add_index < $category_count): ?>
-        <option value="<?php if($value) {echo $value;}else{echo $categories[$add_index];} ?>"><?= $categories[$add_index]; ?></option>
+        <option
+          value="<?= $categories[$add_index]; ?>"
+          <?= $categories[$add_index] == $task_category ? "selected" : '' ?>>
+            <?= $categories[$add_index]; ?>
+        </option>
         <?php $add_index++; ?>
         <?php endwhile; ?>
       </select>

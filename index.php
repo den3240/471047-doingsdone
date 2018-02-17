@@ -2,8 +2,6 @@
 
   require_once 'functions.php';
 
-  $show_complete_tasks = rand(0, 1);
-
   $categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
 
   $task_list = [
@@ -51,8 +49,28 @@
       ]
   ];
 
+  // setcookie("showcompl", 1, time()+3600, "/");
+  if (isset($_COOKIE['showcompl'])) {
+    // echo "1";
+    $show_complete_tasks = $_COOKIE['showcompl'];
+  } else {
+    // echo "2";
+    $show_complete_tasks = 1;
+    setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
+  }
+
+  if (isset($_GET['show_completed'])) {
+    if ($_COOKIE['showcompl'] == 1) {
+      $show_complete_tasks = 0;
+    } else {
+      $show_complete_tasks = 1;
+    }
+    setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
+    header('Location:' . $_SERVER["HTTP_REFERER"]);
+  }
+
   if (isset($_GET['add'])) {
-    $task_add = include_template('templates/task_add.php', ['categories' => $categories]);
+    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '']);
   }
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -78,7 +96,7 @@
    }
 
    if (count($errors)) {
-     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories]);
+     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories, 'task_category' => $task_category]);
    } else {
      array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
    }
