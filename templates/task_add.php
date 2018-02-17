@@ -20,12 +20,13 @@
           $value = isset($task['project']) ? $task['project'] : ""; ?>
       <label class="form__label" for="project">Проект <sup>*</sup></label>
       <?php
-        $add_index = 0;
+        $add_index = 1;
         $category_count = count($categories);
       ?>
       <select class="form__input form__input--select" name="project" id="project">
+        <option value="">Выбрать проект</option>
         <?php while($add_index < $category_count): ?>
-        <option value="<?=$value;?>"><?= $categories[$add_index]; ?></option>
+        <option value="<?php if($value) {echo $value;}else{echo $categories[$add_index];} ?>"><?= $categories[$add_index]; ?></option>
         <?php $add_index++; ?>
         <?php endwhile; ?>
       </select>
