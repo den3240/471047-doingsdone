@@ -1,5 +1,5 @@
 <div class="modal">
-  <button class="modal__close" type="button" name="button">Закрыть</button>
+  <a href="index.php"><button class="modal__close" type="button" name="button">Закрыть</button></a>
 
   <h2 class="modal__heading">Добавление задачи</h2>
 
@@ -16,17 +16,21 @@
     </div>
 
     <div class="form__row">
+      <?php $classname = isset($errors['project']) ? "form__input--error" : "";
+          $value = isset($task['project']) ? $task['project'] : ""; ?>
       <label class="form__label" for="project">Проект <sup>*</sup></label>
       <?php
         $add_index = 1;
         $category_count = count($categories);
       ?>
       <select class="form__input form__input--select" name="project" id="project">
-        <option value="">Выберите проект</option>
-        <?php $classname = isset($errors['project']) ? "form__input--error" : "";
-            $value = isset($task['project']) ? $task['project'] : ""; ?>
+        <option value="">Выбрать проект</option>
         <?php while($add_index < $category_count): ?>
-        <option value="<?=$value;?>"><?= $categories[$add_index]; ?></option>
+        <option
+          value="<?= $categories[$add_index]; ?>"
+          <?= $categories[$add_index] == $task_category ? "selected" : '' ?>>
+            <?= $categories[$add_index]; ?>
+        </option>
         <?php $add_index++; ?>
         <?php endwhile; ?>
       </select>
