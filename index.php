@@ -51,6 +51,15 @@
       ]
   ];
 
+  if (isset($_GET['show_completed'])) {
+    $cookie_val = 1;
+    if (isset($_COOKIE['showcompl'])) {
+      setcookie("showcompl", 1, time()+3600, "/");
+    } else {
+      setcookie("showcompl", 1, time()+3600, "/");
+    }
+  }
+
   if (isset($_GET['add'])) {
     $task_add = include_template('templates/task_add.php', ['categories' => $categories]);
   }
@@ -62,7 +71,7 @@
     $task_category = $_POST['project'];
     $task_date = date("d.m.Y", strtotime($_POST['date']));
 
-    $required = ['name', 'date'];
+    $required = ['name','project', 'date'];
     $errors = [];
     foreach ($required as $key) {
       if (empty($_POST[$key])) {

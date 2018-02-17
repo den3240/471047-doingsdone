@@ -16,14 +16,15 @@
     </div>
 
     <div class="form__row">
-      <?php $classname = isset($errors['project']) ? "form__input--error" : "";
-          $value = isset($task['project']) ? $task['project'] : ""; ?>
       <label class="form__label" for="project">Проект <sup>*</sup></label>
       <?php
-        $add_index = 0;
+        $add_index = 1;
         $category_count = count($categories);
       ?>
       <select class="form__input form__input--select" name="project" id="project">
+        <option value="">Выберите проект</option>
+        <?php $classname = isset($errors['project']) ? "form__input--error" : "";
+            $value = isset($task['project']) ? $task['project'] : ""; ?>
         <?php while($add_index < $category_count): ?>
         <option value="<?=$value;?>"><?= $categories[$add_index]; ?></option>
         <?php $add_index++; ?>
