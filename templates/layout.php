@@ -9,7 +9,7 @@
 </head>
 
 <body <?php if (isset($_GET['add']) || isset($task_add)) : ?>class="overlay"<?php endif; ?> >
-<?php if (isset($_GET['add'])) {require 'task_add.php';}else{echo $task_add;}?>
+<?= $task_add; ?>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 

@@ -51,6 +51,10 @@
       ]
   ];
 
+  if (isset($_GET['add'])) {
+    $task_add = include_template('templates/task_add.php', ['categories' => $categories]);
+  }
+
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $task = $_POST;
@@ -58,7 +62,7 @@
     $task_category = $_POST['project'];
     $task_date = date("d.m.Y", strtotime($_POST['date']));
 
-    $required = ['name','project','date'];
+    $required = ['name', 'date'];
     $errors = [];
     foreach ($required as $key) {
       if (empty($_POST[$key])) {
@@ -74,7 +78,7 @@
    }
 
    if (count($errors)) {
-     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors]);
+     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories]);
    } else {
      array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
    }
