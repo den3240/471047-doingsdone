@@ -17,7 +17,7 @@
     <label class="checkbox">
         <a href="?show_completed">
             <!--добавить сюда аттрибут "checked", если переменная $show_complete_tasks равна единице-->
-            <input class="checkbox__input visually-hidden" type="checkbox" <?php if($_COOKIE['showcompl'] == 1 || isset($_GET['show_completed'])): ?>checked<?php endif; ?> >
+            <input class="checkbox__input visually-hidden" type="checkbox" <?php if($show_complete_tasks == 1): ?>checked<?php endif; ?> >
             <span class="checkbox__text">Показывать выполненные</span>
         </a>
     </label>
@@ -25,7 +25,7 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if(($_COOKIE['showcompl'] == 1 || isset($_GET['show_completed']) && $task['status'] === 'Да') || $task['status'] === "Нет"): ?>
+    <?php if(($show_complete_tasks == 1 && $task['status'] === 'Да') || $task['status'] === "Нет"): ?>
     <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['date'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">

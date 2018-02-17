@@ -2,8 +2,6 @@
 
   require_once 'functions.php';
 
-  $show_complete_tasks = rand(0, 1);
-
   $categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
 
   $task_list = [
@@ -51,13 +49,24 @@
       ]
   ];
 
+  // setcookie("showcompl", 1, time()+3600, "/");
+  if (isset($_COOKIE['showcompl'])) {
+    // echo "1";
+    $show_complete_tasks = $_COOKIE['showcompl'];
+  } else {
+    // echo "2";
+    $show_complete_tasks = 1;
+    setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
+  }
+
   if (isset($_GET['show_completed'])) {
-    $cookie_val = 1;
-    if (isset($_COOKIE['showcompl'])) {
-      setcookie("showcompl", 1, time()+3600, "/");
+    if ($_COOKIE['showcompl'] == 1) {
+      $show_complete_tasks = 0;
     } else {
-      setcookie("showcompl", 1, time()+3600, "/");
+      $show_complete_tasks = 1;
     }
+    setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
+    header('Location:' . $_SERVER["HTTP_REFERER"]);
   }
 
   if (isset($_GET['add'])) {
