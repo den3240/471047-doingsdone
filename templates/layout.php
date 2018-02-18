@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add']) || isset($task_add)) : ?>class="overlay"<?php endif; ?> >
+<body <?php if (isset($_GET['add']) || isset($task_add) || isset($_GET['login']) || isset($auth_form)) : ?>class="overlay"<?php endif; ?> >
 <?= $task_add; ?>
+<?= $auth_form; ?>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 
@@ -19,25 +20,32 @@
             <a href="#">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
-
+            <?php if (isset($_SESSION['$user_valid'])) : ?>
             <div class="main-header__side">
                 <a class="main-header__side-item button button--plus" href="index.php?add">Добавить задачу</a>
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
-                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
+                        <img src="img/<?=$_SESSION['user_img']; ?>" width="40" height="40" alt="Пользователь">
                     </div>
 
                     <div class="user-menu__data">
-                        <p>Константин</p>
+                        <p><?=$username; ?></p>
 
-                        <a href="#">Выйти</a>
+                        <a href="<?php session_destroy(); ?>">Выйти</a>
                     </div>
                 </div>
             </div>
+
+            <?php else : ?>
+            <div class="main-header__side">
+              <a class="main-header__side-item button button--transparent" href="index.php?login">Войти</a>
+            </div>
+            <?php endif; ?>
         </header>
 
         <div class="content">
+          <?php if (isset($_SESSION['$user_valid'])) : ?>
             <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>
 
@@ -61,10 +69,13 @@
                 <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
             </section>
 
+          <?php endif; ?>
+
             <main class="content__main">
               <?= $content; ?>
             </main>
         </div>
+
     </div>
 </div>
 
@@ -76,7 +87,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="<?php if (isset($_SESSION['username'])) : ?>index.php?add<?php else : ?>index.php?login<?php endif; ?>">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>
