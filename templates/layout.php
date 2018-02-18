@@ -32,7 +32,7 @@
                     <div class="user-menu__data">
                         <p><?=$username; ?></p>
 
-                        <a href="<?php session_destroy(); ?>">Выйти</a>
+                        <a href="index.php?exit">Выйти</a>
                     </div>
                 </div>
             </div>
@@ -87,7 +87,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus" href="<?php if (isset($_SESSION['username'])) : ?>index.php?add<?php else : ?>index.php?login<?php endif; ?>">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" href="<?php if (isset($_SESSION['$user_valid'])) : ?>index.php?add<?php else : ?>index.php?login<?php endif; ?>">Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

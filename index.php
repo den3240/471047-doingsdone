@@ -78,7 +78,7 @@
 
 
   if (isset($_GET['add'])) {
-    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '']);
+    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['$user_valid']['name']]);
   }
 
 
@@ -179,7 +179,11 @@
      header("Location: index.php");
      exit();
    }
+  }
 
+  if (isset($_GET['exit'])) {
+    session_destroy();
+    header("Location: index.php");
   }
 
 
