@@ -77,8 +77,10 @@
 
 
 
-  if (isset($_GET['add'])) {
+  if (isset($_GET['add']) && isset($_SESSION['$user_valid'])) {
     $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['$user_valid']['name']]);
+  } elseif (!isset($_SESSION['$user_valid']) && isset($_GET['add'])) {
+    $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
   }
 
 
