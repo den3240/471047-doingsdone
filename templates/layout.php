@@ -26,7 +26,7 @@
 
                 <div class="main-header__side-item user-menu">
                     <div class="user-menu__image">
-                        <img src="img/<?=$_SESSION['user_img']; ?>" width="40" height="40" alt="Пользователь">
+                        <img src="img/user-pic.jpg" width="40" height="40" alt="Пользователь">
                     </div>
 
                     <div class="user-menu__data">
