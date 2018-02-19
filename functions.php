@@ -44,6 +44,8 @@ function searchUserByEmail($user_email, $users) {
       $true_user_pass = $value['password'];
       $user_name = $value['name'];
       return $userdata = ['email' => $true_user_mail, 'password' => $true_user_pass, 'name' => $user_name];
+    } else {
+      return $userdata = [];
     }
   }
 }
