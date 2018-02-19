@@ -25,7 +25,8 @@ CREATE TABLE tasks (
     create_date DATE,
     complete_date DATE,
     deadline DATE,
-    u_id CHAR(128)
+    u_id CHAR(128),
+    p_id CHAR(128)
 );
 
 SELECT u.id, p.name AS 
@@ -39,3 +40,9 @@ t_name
 FROM users u INNER JOIN 
 tasks t ON 
 t.u_id = u.id;
+
+SELECT p.id, t.name AS 
+t_name 
+FROM projects p INNER JOIN 
+tasks t ON 
+t.p_id = p.id;
