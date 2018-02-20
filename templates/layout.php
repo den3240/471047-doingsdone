@@ -8,8 +8,9 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add']) || isset($task_add)) : ?>class="overlay"<?php endif; ?> >
+<body <?php if (isset($_GET['add']) || $task_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
 <?= $task_add; ?>
+<?= $auth_form; ?>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 
@@ -19,7 +20,7 @@
             <a href="#">
                 <img src="img/logo.png" width="153" height="42" alt="Логотип Дела в порядке">
             </a>
-
+            <?php if ($active_session) : ?>
             <div class="main-header__side">
                 <a class="main-header__side-item button button--plus" href="index.php?add">Добавить задачу</a>
 
@@ -29,15 +30,22 @@
                     </div>
 
                     <div class="user-menu__data">
-                        <p>Константин</p>
+                        <p><?=$username; ?></p>
 
-                        <a href="#">Выйти</a>
+                        <a href="index.php?exit">Выйти</a>
                     </div>
                 </div>
             </div>
+
+            <?php else : ?>
+            <div class="main-header__side">
+              <a class="main-header__side-item button button--transparent" href="index.php?login">Войти</a>
+            </div>
+            <?php endif; ?>
         </header>
 
         <div class="content">
+          <?php if (isset($_SESSION['user_valid']) ) : ?>
             <section class="content__side">
                 <h2 class="content__side-heading">Проекты</h2>
 
@@ -45,7 +53,7 @@
                   $index = 0;
                   $category_count = count($categories);
                 ?>
-
+                <?php $_GET['category_id'] = 0 ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
                         <?php while($index < $category_count): ?>
@@ -60,11 +68,13 @@
 
                 <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
             </section>
+          <?php endif; ?>
 
             <main class="content__main">
               <?= $content; ?>
             </main>
         </div>
+
     </div>
 </div>
 
@@ -76,7 +86,7 @@
             <p>Веб-приложение для удобного ведения списка дел.</p>
         </div>
 
-        <a class="main-footer__button button button--plus">Добавить задачу</a>
+        <a class="main-footer__button button button--plus" <?php if ($active_session) : ?>href="index.php?add"<?php endif; ?>>Добавить задачу</a>
 
         <div class="main-footer__social social">
             <span class="visually-hidden">Мы в соцсетях:</span>

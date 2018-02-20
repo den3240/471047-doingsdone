@@ -37,4 +37,16 @@ function date_check($date) {
   }
 }
 
+function searchUserByEmail($user_email, $users) {
+  foreach ($users as $key => $value) {
+    if ($user_email == $value['email']) {
+      $true_user_mail = $value['email'];
+      $true_user_pass = $value['password'];
+      $user_name = $value['name'];
+      return $userdata = ['email' => $true_user_mail, 'password' => $true_user_pass, 'name' => $user_name];
+    }
+  }
+  return $userdata = [];
+}
+
 ?>
