@@ -4,36 +4,36 @@ CREATE DATABASE `doingsdone`
 USE `doingsdone`;
 
 CREATE TABLE `users` (
-	`id`  INT NOT NULL AUTO_INCREMENT,
-	`name` CHAR(128),
-	`email` CHAR(128) UNIQUE,
-	`password` CHAR(64),
-	`contacts` CHAR(128),
-	`registration_date` DATE,
-  UNIQUE KEY (`email`),
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL,
+	`email` char(128) NOT NULL UNIQUE,
+	`password` char(64) NOT NULL,
+	`registration_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`contacts` char(128) NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `projects` (
-	`id` INT  NOT NULL AUTO_INCREMENT,
-	`name` CHAR(128),
-	`users_id` CHAR(128),
-  UNIQUE KEY (`name`),
-	PRIMARY KEY (`id`),
-  FOREIGN KEY (`users_id`) REFERENCES users(`id`)
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL UNIQUE,
+	`user_id` int NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tasks` (
-	`id` INT  NOT NULL AUTO_INCREMENT,
-	`name` CHAR(128) UNIQUE,
-	`file` CHAR(128),
-	`create_date` DATE,
-	`complete_date` DATE,
-	`deadline` DATE,
-	`users_id` CHAR(128),
-	`projects_id` CHAR(128),
-  UNIQUE KEY (`name`),
-	PRIMARY KEY (`id`),
-  FOREIGN KEY (`users_id`) REFERENCES users(`id`),
-  FOREIGN KEY (`projects_id`) REFERENCES projects(`id`)
-); 
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL UNIQUE,
+	`file` char(128) NOT NULL,
+	`create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`complete_date` TIMESTAMP NOT NULL,
+	`deadline` TIMESTAMP NOT NULL,
+	`user_id` int NOT NULL,
+	`project_id` int NOT NULL,
+	PRIMARY KEY (`id`)
+);
+
+ALTER TABLE `projects` ADD CONSTRAINT `projects_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
+
+ALTER TABLE `tasks` ADD CONSTRAINT `tasks_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
+
+ALTER TABLE `tasks` ADD CONSTRAINT `tasks_fk1` FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`);
