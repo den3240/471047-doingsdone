@@ -4,30 +4,33 @@ CREATE DATABASE `doingsdone`
 USE `doingsdone`;
 
 CREATE TABLE `users` (
-	`id`  NOT NULL AUTO_INCREMENT,
-	`name` char(128),
-	`email` (128) UNIQUE,
-	`password` char(64),
-	`contacts` char(128),
+	`id`  INT NOT NULL AUTO_INCREMENT,
+	`name` CHAR(128),
+	`email` CHAR(128) UNIQUE,
+	`password` CHAR(64),
+	`contacts` CHAR(128),
 	`registration_date` DATE,
+  UNIQUE KEY (`email`),
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `projects` (
-	`id`  NOT NULL AUTO_INCREMENT,
-	`name` (128) UNIQUE,
-	`u_id` (128),
+	`id` INT  NOT NULL AUTO_INCREMENT,
+	`name` CHAR(128),
+	`users_id` CHAR(128),
+  UNIQUE KEY (`name`),
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tasks` (
-	`id`  NOT NULL AUTO_INCREMENT,
-	`name` (128) UNIQUE,
-	`file` char(128),
+	`id` INT  NOT NULL AUTO_INCREMENT,
+	`name` CHAR(128) UNIQUE,
+	`file` CHAR(128),
 	`create_date` DATE,
 	`complete_date` DATE,
 	`deadline` DATE,
-	`u_id` (128),
-	`p_id` (128),
+	`users_id` CHAR(128),
+	`projects_id` CHAR(128),
+  UNIQUE KEY (`name`),
 	PRIMARY KEY (`id`)
 );
