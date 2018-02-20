@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add']) || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
+<body <?php if (isset($_GET['add']) || $task_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
 <?= $task_add; ?>
 <?= $auth_form; ?>
 
