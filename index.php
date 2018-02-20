@@ -1,5 +1,5 @@
 <?php
-
+  session_start();
   require_once 'functions.php';
   require 'userdata.php';
 
@@ -50,7 +50,10 @@
       ]
   ];
 
-
+  $active_session = '';
+  $task_add = '';
+  $auth_form = '';
+  $username = '';
   // setcookie("showcompl", 1, time()+3600, "/");
   if (isset($_COOKIE['showcompl'])) {
     // echo "1";
@@ -77,8 +80,10 @@
 
 
 
-  if (isset($_GET['add'])) {
-    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['$user_valid']['name']]);
+  if (isset($_GET['add']) && isset($_SESSION['user_valid'])) {
+    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['user_valid']['name']]);
+  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['add'])) {
+    $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
   }
 
 
@@ -113,14 +118,15 @@
    }
   }
 
+  $page_content = include_template('templates/guest.php', []);
 
 
-  session_start();
-  if (isset($_SESSION['$user_valid'])) {
-      $username = $_SESSION['$user_valid']['name'];
+  if (isset($_SESSION['user_valid'])) {
+      $username = $_SESSION['user_valid']['name'];
       $filtered_tasks = null;
+      $active_session = isset($_SESSION['user_valid']);
 
-      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['$user_valid']['name']]);
+      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
 
       if (isset($_GET['category_id'])) {
         (int)$category_id = $_GET['category_id'];
@@ -134,7 +140,7 @@
             $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
               return $element['category'] == $filter_category;
             });
-            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['$user_valid']['name']]);
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
           }
         }
       }
@@ -162,7 +168,7 @@
 
    if ($user_valid = searchUserByEmail($user_email, $users)) {
        if (password_verify($user['password'], $user_valid['password'])) {
-         $_SESSION['$user_valid'] = $user_valid;
+         $_SESSION['user_valid'] = $user_valid;
        }
        else {
          $errors['password'] = 'Неверный пароль';
@@ -177,7 +183,6 @@
      $auth_form = include_template('templates/auth_form.php', ['user' => $user, 'errors' => $errors]);
    } else {
      header("Location: index.php");
-     exit();
    }
   }
 
@@ -196,7 +201,8 @@
     'task_list' => $task_list,
     'task_add' => $task_add,
     'auth_form' => $auth_form,
-    'username' => $username
+    'username' => $username,
+    'active_session' => $active_session
   ]);
 
   print($layout_content);
