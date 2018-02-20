@@ -19,7 +19,8 @@ CREATE TABLE `projects` (
 	`name` CHAR(128),
 	`users_id` CHAR(128),
   UNIQUE KEY (`name`),
-	PRIMARY KEY (`id`)
+	PRIMARY KEY (`id`),
+  FOREIGN KEY (`users_id`) REFERENCES users(`id`)
 );
 
 CREATE TABLE `tasks` (
@@ -32,5 +33,7 @@ CREATE TABLE `tasks` (
 	`users_id` CHAR(128),
 	`projects_id` CHAR(128),
   UNIQUE KEY (`name`),
-	PRIMARY KEY (`id`)
-);
+	PRIMARY KEY (`id`),
+  FOREIGN KEY (`users_id`) REFERENCES users(`id`),
+  FOREIGN KEY (`projects_id`) REFERENCES projects(`id`)
+); 
