@@ -1,48 +1,39 @@
-CREATE DATABASE doingsdone;
+CREATE DATABASE `doingsdone`
     DEFAULT CHARACTER SET utf8
     DEFAULT COLLATE utf8_general_ci;
-USE doingsdone;
+USE `doingsdone`;
 
-CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name CHAR(128),
-    email CHAR(128),
-    password CHAR(64),
-    contacts CHAR(128),
-    registration_date DATE
+CREATE TABLE `users` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL,
+	`email` char(128) NOT NULL UNIQUE,
+	`password` char(64) NOT NULL,
+	`registration_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`contacts` char(128) NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE projects (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name CHAR(128),
-    u_id CHAR(128)
+CREATE TABLE `projects` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL UNIQUE,
+	`user_id` int NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
-CREATE TABLE tasks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    name CHAR(128),
-    file CHAR(128),
-    create_date DATE,
-    complete_date DATE,
-    deadline DATE,
-    u_id CHAR(128),
-    p_id CHAR(128)
+CREATE TABLE `tasks` (
+	`id` int NOT NULL AUTO_INCREMENT,
+	`name` char(128) NOT NULL UNIQUE,
+	`file` char(128) NOT NULL,
+	`create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`complete_date` TIMESTAMP NOT NULL,
+	`deadline` TIMESTAMP NOT NULL,
+	`user_id` int NOT NULL,
+	`project_id` int NOT NULL,
+	PRIMARY KEY (`id`)
 );
 
-SELECT u.id, p.name AS 
-p_name 
-FROM users u INNER JOIN 
-projects p ON 
-p.u_id = u.id;
+ALTER TABLE `projects` ADD CONSTRAINT `projects_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
 
-SELECT u.id, t.name AS 
-t_name 
-FROM users u INNER JOIN 
-tasks t ON 
-t.u_id = u.id;
+ALTER TABLE `tasks` ADD CONSTRAINT `tasks_fk0` FOREIGN KEY (`user_id`) REFERENCES `users`(`id`);
 
-SELECT p.id, t.name AS 
-t_name 
-FROM projects p INNER JOIN 
-tasks t ON 
-t.p_id = p.id;
+ALTER TABLE `tasks` ADD CONSTRAINT `tasks_fk1` FOREIGN KEY (`project_id`) REFERENCES `projects`(`id`);

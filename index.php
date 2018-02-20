@@ -50,7 +50,10 @@
       ]
   ];
 
-
+  $active_session = '';
+  $task_add = '';
+  $auth_form = '';
+  $username = '';
   // setcookie("showcompl", 1, time()+3600, "/");
   if (isset($_COOKIE['showcompl'])) {
     // echo "1";
@@ -115,12 +118,13 @@
    }
   }
 
-
+  $page_content = include_template('templates/guest.php', []);
 
 
   if (isset($_SESSION['user_valid'])) {
       $username = $_SESSION['user_valid']['name'];
       $filtered_tasks = null;
+      $active_session = isset($_SESSION['user_valid']);
 
       $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $task_list, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
 
@@ -179,7 +183,6 @@
      $auth_form = include_template('templates/auth_form.php', ['user' => $user, 'errors' => $errors]);
    } else {
      header("Location: index.php");
-     exit();
    }
   }
 
@@ -198,7 +201,8 @@
     'task_list' => $task_list,
     'task_add' => $task_add,
     'auth_form' => $auth_form,
-    'username' => $username
+    'username' => $username,
+    'active_session' => $active_session
   ]);
 
   print($layout_content);
