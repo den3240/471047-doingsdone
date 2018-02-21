@@ -9,7 +9,7 @@ CREATE TABLE `users` (
 	`email` char(128) NOT NULL UNIQUE,
 	`password` char(64) NOT NULL,
 	`registration_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`contacts` char(128) NULL,
+	`contacts` char(128),
 	PRIMARY KEY (`id`)
 );
 
@@ -23,10 +23,10 @@ CREATE TABLE `projects` (
 CREATE TABLE `tasks` (
 	`id` int NOT NULL AUTO_INCREMENT,
 	`name` char(128) NOT NULL UNIQUE,
-	`file` char(128) NULL,
+	`file` char(128),
 	`create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`complete_date` DATETIME NULL,
-	`deadline` DATETIME NULL,
+	`complete_date` DATETIME,
+	`deadline` DATETIME,
 	`user_id` int NOT NULL,
 	`project_id` int NOT NULL,
 	PRIMARY KEY (`id`)
