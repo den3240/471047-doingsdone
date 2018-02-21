@@ -95,8 +95,11 @@
     $task_name = $_POST['name'];
     $task_category = $_POST['project'];
     $task_date = date("d.m.Y", strtotime($_POST['date']));
+    if (isset($task_date)) {
+      $task_date = false;
+    }
 
-    $required = ['name', 'project', 'date'];
+    $required = ['name', 'project'];
     $errors = [];
     foreach ($required as $key) {
       if (empty($_POST[$key])) {
