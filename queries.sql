@@ -1,3 +1,5 @@
+USE `doingsdone`;
+
 /* Добавляю данные в таблицу USERS */
 INSERT INTO `users` (`name`, `email`, `password`, `contacts`) VALUES ('Игнат', 'ignat.v@gmail.com', '$2y$10$OqvsKHQwr0Wk6FMZDoHo1uHoXd4UdxJG/5UDtUiie00XaxMHrW8ka', 'ignat.v@gmail.com'), ('Леночка', 'kitty_93@li.ru', '$2y$10$bWtSjUhwgggtxrnJ7rxmIe63ABubHQs0AS0hgnOo41IEdMHkYoSVa', 'kitty_93@li.ru'), ('Руслан', 'warrior07@mail.ru', '$2y$10$2OxpEH7narYpkOT1H5cApezuzh10tZEEQ2axgFOaKW.55LxIJBgWW', 'warrior07@mail.ru');
 
