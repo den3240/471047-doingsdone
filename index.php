@@ -1,8 +1,8 @@
 <?php
   session_start();
   require_once 'functions.php';
-  require 'userdata.php';
-  require_once 'config/db.php';
+  require_once 'config/database.php';
+  require_once 'mysql_helper.php';
 
   $active_session = '';
   $task_add = '';
@@ -160,6 +160,7 @@
    }
   }
 
+  // Обработка формы регистрации
   if (isset($_POST['registration'])) {
     $new_user = $_POST;
     $new_user_email = $_POST['email'];
@@ -202,12 +203,6 @@
   if (isset($_GET['exit'])) {
     session_destroy();
     header("Location: index.php");
-  }
-
-
-  if (!$con) {
-    $error = mysqli_connect_error($con);
-    $page_content = include_template('templates/error.php', ['error' => $error]);
   }
 
   $layout_content = include_template('templates/layout.php', [
