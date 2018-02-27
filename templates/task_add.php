@@ -19,20 +19,15 @@
       <?php $classname = isset($errors['project']) ? "form__input--error" : "";
           $value = isset($task['project']) ? $task['project'] : ""; ?>
       <label class="form__label" for="project">Проект <sup>*</sup></label>
-      <?php
-        $add_index = 1;
-        $category_count = count($categories);
-      ?>
       <select class="form__input form__input--select" name="project" id="project">
         <option value="">Выбрать проект</option>
-        <?php while($add_index < $category_count): ?>
+        <?php foreach ($categories as $key => $category) : ?>
         <option
-          value="<?= $categories[$add_index]; ?>"
-          <?= $categories[$add_index] == $task_category ? "selected" : '' ?>>
-            <?= $categories[$add_index]; ?>
+          value="<?= $category['name']); ?>"
+          <?= $category['name']) == $task_category ? "selected" : '' ?>>
+            <?= $category['name']) ?>
         </option>
-        <?php $add_index++; ?>
-        <?php endwhile; ?>
+      <?php endforeach; ?>
       </select>
       <?php if (isset($errors['project'])): ?>
         <p class="form__message">Заполните это поле</p>

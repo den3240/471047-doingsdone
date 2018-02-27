@@ -196,8 +196,8 @@
        if ($res) {
          header("Location: index.php?login");
        } else {
-         echo mysqli_error($con);
-         exit();
+         $error = mysqli_error($con);
+         $page_content = include_template('templates/error.php', ['error' => $error]);
        }
      }
    }
