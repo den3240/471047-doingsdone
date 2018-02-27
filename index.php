@@ -1,8 +1,8 @@
 <?php
   session_start();
+  require_once 'config/database.php';
   require_once 'functions.php';
-  require 'userdata.php';
-  require_once 'config/db.php';
+  require_once 'mysql_helper.php';
 
 
   $categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
