@@ -2,15 +2,7 @@
   session_start();
   require_once 'functions.php';
   require 'userdata.php';
-
-
-  $con = mysqli_connect('127.0.0.1','root','','doingsdone');
-  mysqli_set_charset($con, "utf8");
-
-  if (!$con) {
-    $error = mysqli_connect_error();
-    $content = include_template('templates/error.php', ['error' => $error]);
-  }
+  require_once 'config/db.php';
 
   $active_session = '';
   $task_add = '';
@@ -219,8 +211,8 @@
 
 
   if (!$con) {
-    $error = mysqli_connect_error();
-    $page_content = include_template('templates/error.php', ['error_text' => "404"]);
+    $error = mysqli_connect_error($con);
+    $page_content = include_template('templates/error.php', ['error' => $error]);
   }
 
   $layout_content = include_template('templates/layout.php', [
@@ -232,6 +224,7 @@
     'auth_form' => $auth_form,
     'username' => $username,
     'register_form' => $register_form,
+    'error' => $error,
     'active_session' => $active_session
   ]);
 
