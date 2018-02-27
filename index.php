@@ -1,7 +1,9 @@
 <?php
   session_start();
   require_once 'functions.php';
-  require 'userdata.php';
+  require_once 'config/database.php';
+  require_once 'mysql_helper.php';
+
 
   $categories = ["Все", "Входящие", "Учеба", "Работа", "Домашние дела", "Авто"];
 
@@ -151,7 +153,11 @@
     $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
 
   } else {
-      $page_content = include_template('templates/guest.php', []);
+      if (!isset($_GET['register'])) {
+        $page_content = include_template('templates/guest.php', []);
+      } else {
+        $page_content = include_template('templates/register.php', []);
+      }
   }
 
   if (isset($_POST['login_btn'])) {
@@ -168,16 +174,17 @@
       }
    }
 
-
-   if ($user_valid = searchUserByEmail($user_email, $users)) {
-       if (password_verify($user['password'], $user_valid['password'])) {
-         $_SESSION['user_valid'] = $user_valid;
-       }
-       else {
-         $errors['password'] = 'Неверный пароль';
-       }
+   $sql = 'SELECT `name`, `email`, `password` FROM users';
+   $result = mysqli_query($con, $sql);
+   $users_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+   if ($user_valid = searchUserByEmail($user_email, $users_list)) {
+     if (password_verify($user['password'], $user_valid['password'])) {
+       $_SESSION['user_valid'] = $user_valid;
+     } else {
+       $errors['password'] = 'Неверный пароль';
+     }
   } elseif (filter_var($user_email, FILTER_VALIDATE_EMAIL)) {
-    $errors['email'] = 'Такой пользователь не найден';
+    $errors['email'] = 'Такой пользователь уже существует';
   } else {
     $errors['email'] = 'Такой пользователь не найден';
   }
@@ -189,13 +196,50 @@
    }
   }
 
+  // Обработка формы регистрации
+  if (isset($_POST['registration'])) {
+    $new_user = $_POST;
+    $new_user_email = $_POST['email'];
+    $new_user_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $new_user_name = $_POST['name'];
+
+    $required = ['email', 'password', 'name'];
+    $errors = [];
+    foreach ($required as $key) {
+      if (empty($_POST[$key])) {
+        $errors[$key] = 'Заполните это поле';
+      }
+   }
+   if (!filter_var($new_user_email, FILTER_VALIDATE_EMAIL)) {
+     $errors['email'] = 'Email некорректный';
+   } elseif ($user_valid = searchUserByEmail($new_user_email, $users)) {
+      $errors['email'] = 'Такое пользователь уже существует';
+    } else {
+     $new_user_email = $_POST['email'];
+   }
+
+   if (count($errors)) {
+     $register_form = include_template('templates/register.php', ['new_user' => $new_user, 'errors' => $errors]);
+   } else {
+     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       $sql = "INSERT INTO `users` (`name`, `email`, `password`, `contacts`) VALUES (?, ?, ?, NULL)";
+       $stmt = db_get_prepare_stmt($con, $sql, [$new_user_name, $new_user_email, $new_user_password]);
+       $res = mysqli_stmt_execute($stmt);
+       if ($res) {
+         header("Location: index.php?login");
+       } else {
+         echo mysqli_error($con);
+         exit();
+       }
+     }
+   }
+  }
+
+
   if (isset($_GET['exit'])) {
     session_destroy();
     header("Location: index.php");
   }
-
-
-
 
   $layout_content = include_template('templates/layout.php', [
   	'content' => $page_content,
@@ -205,6 +249,8 @@
     'task_add' => $task_add,
     'auth_form' => $auth_form,
     'username' => $username,
+    'register_form' => $register_form,
+    'error' => $error,
     'active_session' => $active_session
   ]);
 

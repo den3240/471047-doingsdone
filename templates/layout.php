@@ -37,11 +37,13 @@
                 </div>
             </div>
 
-            <?php else : ?>
+          <?php elseif (isset($_GET['register']) || $register_form) :?>
+
+          <?php else : ?>
             <div class="main-header__side">
               <a class="main-header__side-item button button--transparent" href="index.php?login">Войти</a>
             </div>
-            <?php endif; ?>
+          <?php endif; ?>
         </header>
 
         <div class="content">
@@ -72,10 +74,20 @@
 
                 <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
             </section>
+          <?php elseif (isset($_GET['register']) || $register_form) : ?>
+            <section class="content__side">
+              <p class="content__side-info">Если у вас уже есть аккаунт, авторизуйтесь на сайте</p>
+
+              <a class="button button--transparent content__side-button" href="index.php?login">Войти</a>
+            </section>
           <?php endif; ?>
 
             <main class="content__main">
-              <?= $content; ?>
+              <?php if ($register_form): ?>
+                <?= $register_form; ?>
+              <?php else : ?>
+                <?= $content; ?>
+              <?php endif; ?>
             </main>
         </div>
 
