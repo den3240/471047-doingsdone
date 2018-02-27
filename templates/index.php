@@ -25,7 +25,7 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if(($show_complete_tasks == 1 && $task['complete_date'] === NULL) || $task['complete_date'] !== NULL): ?>
+    <?php if(($show_complete_tasks == 1 && $task['complete_date'] !== NULL) || $task['complete_date'] === NULL): ?>
     <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">

@@ -20,7 +20,6 @@
 
 
 
-
   if (isset($_GET['show_completed'])) {
     if ($_COOKIE['showcompl'] == 1) {
       $show_complete_tasks = 0;
@@ -29,50 +28,6 @@
     }
     setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
     header('Location:' . $_SERVER["HTTP_REFERER"]);
-  }
-
-
-
-
-  if (isset($_GET['add']) && isset($_SESSION['user_valid'])) {
-    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['user_valid']['name']]);
-  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['add'])) {
-    $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
-  }
-
-
-
-
-  if (isset($_POST['add_btn'])) {
-
-    $task = $_POST;
-    $task_name = $_POST['name'];
-    $task_category = $_POST['project'];
-    $task_date = date("d.m.Y", strtotime($_POST['date']));
-    if (isset($task_date)) {
-      $task_date = false;
-    }
-
-    $required = ['name', 'project'];
-    $errors = [];
-    foreach ($required as $key) {
-      if (empty($_POST[$key])) {
-        $errors[$key] = 'Заполните это поле';
-      }
-   }
-
-   if (isset($_FILES['preview']['name'])) {
-      $tmp_name = $_FILES['preview']['tmp_name'];
-      $path = $_FILES['preview']['name'];
-
-      move_uploaded_file($tmp_name, '' . $path);
-   }
-
-   if (count($errors)) {
-     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories, 'task_category' => $task_category]);
-   } else {
-     array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
-   }
   }
 
   $page_content = include_template('templates/guest.php', []);
@@ -108,12 +63,14 @@
             http_response_code(404);
             $page_content = include_template('templates/error.php', ['error_text' => "404"]);
           } else {
-            if ($categories[$category_id] != "Все") {
-              $filter_category = $categories[$category_id];
-              $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
-                return $element['category'] == $filter_category;
-              });
-              $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+            if ($_GET['category_id'] !== "all") {
+              if ($_GET['category_id'] == $category['id']) {
+                $filter_category = $category['id'];
+                $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
+                  return $element['project_id'] == $filter_category;
+                });
+                $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+              }
             }
           }
         }
@@ -127,6 +84,44 @@
       } else {
         $page_content = include_template('templates/register.php', []);
       }
+  }
+
+  if (isset($_GET['add']) && isset($_SESSION['user_valid'])) {
+    $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['user_valid']['name']]);
+  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['add'])) {
+    $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
+  }
+
+  if (isset($_POST['add_btn'])) {
+
+    $task = $_POST;
+    $task_name = $_POST['name'];
+    $task_category = $_POST['project'];
+    $task_date = date("d.m.Y", strtotime($_POST['date']));
+    if (isset($task_date)) {
+      $task_date = false;
+    }
+
+    $required = ['name', 'project'];
+    $errors = [];
+    foreach ($required as $key) {
+      if (empty($_POST[$key])) {
+        $errors[$key] = 'Заполните это поле';
+      }
+   }
+
+   if (isset($_FILES['preview']['name'])) {
+      $tmp_name = $_FILES['preview']['tmp_name'];
+      $path = $_FILES['preview']['name'];
+
+      move_uploaded_file($tmp_name, '' . $path);
+   }
+
+   if (count($errors)) {
+     $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories, 'task_category' => $task_category]);
+   } else {
+     array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
+   }
   }
 
   if (isset($_POST['login_btn'])) {

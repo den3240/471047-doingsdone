@@ -22,12 +22,11 @@
       <select class="form__input form__input--select" name="project" id="project">
         <option value="">Выбрать проект</option>
         <?php foreach ($categories as $key => $category) : ?>
-        <option
-          value="<?= $category['name']); ?>"
-          <?= $category['name']) == $task_category ? "selected" : '' ?>>
-            <?= $category['name']) ?>
-        </option>
-      <?php endforeach; ?>
+          <option value="<?=htmlspecialchars($category['name']); ?>"
+          <?= $category['name'] == $task_category ? "selected" : '' ?>>
+            <?=htmlspecialchars($category['name']); ?>
+          </option>
+        <?php endforeach; ?>
       </select>
       <?php if (isset($errors['project'])): ?>
         <p class="form__message">Заполните это поле</p>
