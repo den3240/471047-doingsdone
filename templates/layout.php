@@ -62,13 +62,12 @@
                 } ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                        <?php while($index < $category_count): ?>
-                        <li class="main-navigation__list-item <?php if ($category_id == $index) :?>main-navigation__list-item--active<?php endif; ?>">
-                            <a class="main-navigation__list-item-link" href="index.php?category_id=<?=$index;?>"><?=htmlspecialchars($categories[$index]);?></a>
-                            <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $categories[$index]) ?></span>
+                      <?php foreach ($categories as $key => $category) : ?>
+                        <li class="main-navigation__list-item <?php if ($category['id'] == $_GET['category_id']) :?>main-navigation__list-item--active<?php endif; ?>">
+                            <a class="main-navigation__list-item-link" href="index.php?category_id=<?=$category['id'];?>"><?=htmlspecialchars($category['name']);?></a>
+                            <span class="main-navigation__list-item-count"><?php echo task_counting($task_list, $category['id']) ?></span>
                         </li>
-                        <?php $index = $index + 1; ?>
-                        <?php endwhile; ?>
+                      <?php endforeach; ?>
                     </ul>
                 </nav>
 

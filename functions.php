@@ -13,13 +13,13 @@ function include_template($path, $data) {
 
 
 
-function task_counting ($task_list = [], $project_name = "Все") {
+function task_counting ($task_list = [], $project_id) {
   if ($project_name == "Все"){
     return count($task_list);
   }
   $project_count = 0;
   foreach ($task_list as $key => $value) {
-    if ($value['category'] === $project_name) {
+    if ($value['project_id'] == $project_id) {
       $project_count++;
     }
   }
@@ -43,7 +43,8 @@ function searchUserByEmail($user_email, $users) {
       $true_user_mail = $value['email'];
       $true_user_pass = $value['password'];
       $user_name = $value['name'];
-      return $userdata = ['email' => $true_user_mail, 'password' => $true_user_pass, 'name' => $user_name];
+      $user_id = $value['id'];
+      return $userdata = ['email' => $true_user_mail, 'password' => $true_user_pass, 'name' => $user_name, 'id' => $user_id];
     }
   }
   return $userdata = [];

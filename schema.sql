@@ -15,14 +15,14 @@ CREATE TABLE `users` (
 
 CREATE TABLE `projects` (
 	`id` int NOT NULL AUTO_INCREMENT,
-	`name` char(128) NOT NULL UNIQUE,
+	`name` char(128) NOT NULL,
 	`user_id` int NOT NULL,
 	PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `tasks` (
 	`id` int NOT NULL AUTO_INCREMENT,
-	`name` char(128) NOT NULL UNIQUE,
+	`name` char(128) NOT NULL,
 	`file` char(128),
 	`create_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`complete_date` DATETIME,
