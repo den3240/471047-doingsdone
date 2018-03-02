@@ -38,10 +38,7 @@
           $value = isset($task['date']) ? $task['date'] : ""; ?>
       <label class="form__label" for="date">Дата выполнения</label>
 
-      <input class="form__input form__input--date <?=$classname;?>" type="date" name="date" id="date" value="<?=$value;?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ">
-      <?php if (isset($errors['date'])): ?>
-        <p class="form__message">Заполните это поле</p>
-      <?php endif; ?>
+      <input class="form__input form__input--date <?=$classname;?>" type="date" name="date" id="date" value="<?=$value;?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ" title="Введите дату в формате ДД.ММ.ГГГГ">
     </div>
 
     <div class="form__row">

@@ -8,17 +8,13 @@
   $task_add = '';
   $auth_form = '';
   $username = '';
-  // setcookie("showcompl", 1, time()+3600, "/");
+
   if (isset($_COOKIE['showcompl'])) {
-    // echo "1";
     $show_complete_tasks = $_COOKIE['showcompl'];
   } else {
-    // echo "2";
     $show_complete_tasks = 1;
     setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
   }
-
-
 
   if (isset($_GET['show_completed'])) {
     if ($_COOKIE['showcompl'] == 1) {
@@ -32,7 +28,7 @@
 
   $page_content = include_template('templates/guest.php', []);
 
-
+  // Проверяем наличие сессии
   if (isset($_SESSION['user_valid'])) {
       $username = $_SESSION['user_valid']['name'];
       $user_id = $_SESSION['user_valid']['id'];
@@ -63,7 +59,7 @@
             http_response_code(404);
             $page_content = include_template('templates/error.php', ['error_text' => "404"]);
           } else {
-            if ($_GET['category_id'] !== "all") {
+            if ($_GET['category_id'] !== "all_p") {
               if ($_GET['category_id'] == $category['id']) {
                 $filter_category = $category['id'];
                 $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
@@ -86,20 +82,29 @@
       }
   }
 
+
+  // Показываем форму добавление задачи
   if (isset($_GET['add']) && isset($_SESSION['user_valid'])) {
     $task_add = include_template('templates/task_add.php', ['task' => [], 'errors' => [], 'categories' => $categories, 'task_category' => '', 'username' => $_SESSION['user_valid']['name']]);
   } elseif (!isset($_SESSION['user_valid']) && isset($_GET['add'])) {
     $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
   }
 
+  // Обработка формы добаление задания
   if (isset($_POST['add_btn'])) {
 
     $task = $_POST;
     $task_name = $_POST['name'];
     $task_category = $_POST['project'];
-    $task_date = date("d.m.Y", strtotime($_POST['date']));
-    if (isset($task_date)) {
-      $task_date = false;
+    $task_date = date("Y.m.d", strtotime($_POST['date']));
+    if (!isset($task_date)) {
+      $task_date = NULL;
+    }
+
+    foreach ($categories as $key => $category) {
+      if ($task_category == $category['name']) {
+        $category_id = $category['id'];
+      }
     }
 
     $required = ['name', 'project'];
@@ -115,15 +120,94 @@
       $path = $_FILES['preview']['name'];
 
       move_uploaded_file($tmp_name, '' . $path);
+   } else {
+     $path = NULL;
    }
 
    if (count($errors)) {
      $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories, 'task_category' => $task_category]);
    } else {
-     array_unshift($task_list, ['title' => $task_name, 'date' => $task_date, 'category' => $task_category, 'status' => 'Нет']);
+     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       $sql = "INSERT INTO `tasks` (`name`, `file`, `deadline`, `user_id`, `project_id`) VALUES (?, ?, ?, ?, ?)";
+       $stmt = db_get_prepare_stmt($con, $sql, [$task_name, $path, $task_date, $user_id, $category_id]);
+       $res = mysqli_stmt_execute($stmt);
+
+       if ($res) {
+         header("Location: index.php");
+       } else {
+         $error = mysqli_error($con);
+         echo "Ошибка в коде";
+         $page_content = include_template('templates/error.php', ['error' => $error]);
+       }
+    }
    }
   }
 
+  // Показываем форму добавление проекта
+  if (isset($_GET['p_add']) && isset($_SESSION['user_valid'])) {
+    $p_add = include_template('templates/project_add.php', ['project' => [], 'errors' => [], 'username' => $_SESSION['user_valid']['name']]);
+  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['p_add'])) {
+    $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
+  }
+
+  // Обработка формы добавление проекта
+  if (isset($_POST['proj_add_btn'])) {
+
+    $project = $_POST;
+    $project_name = $_POST['name'];
+
+    $errors = [];
+    if (empty($_POST['name'])) {
+      $errors[$key] = 'Заполните это поле';
+    }
+
+   if (count($errors)) {
+     $task_add = include_template('templates/project_add.php', ['project' => $project, 'errors' => $errors]);
+   } else {
+     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       $sql = "INSERT INTO `projects` (`name`, `user_id`) VALUES (?, ?)";
+       $stmt = db_get_prepare_stmt($con, $sql, [$project_name, $user_id]);
+       $res = mysqli_stmt_execute($stmt);
+
+       if ($res) {
+         header("Location: index.php");
+       } else {
+         $error = mysqli_error($con);
+         $page_content = include_template('templates/error.php', ['error' => $error]);
+       }
+    }
+   }
+  }
+
+  if ($_GET['t_filter'] != 'all') {
+    if ($_GET['t_filter'] == 'today') {
+      // Робив фільтрацію завдань через вивід з DATABASE
+      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE()');
+      // $filter_day = mysqli_fetch_all($filter_result, MYSQLI_ASSOC);
+      // foreach ($categories as $key => $category) {
+      //   if ($_GET['category_id'] == $category['id']) {
+      //     $filter_category = $category['id'];
+      //     echo $filter_category;
+      //     $filtered_tasks = array_filter($filter_day, function($element) use ($filter_category) {
+      //       return $element['project_id'] == $filter_category;
+      //     });
+      //     print_r($filtered_tasks);
+      //   }
+      // }
+
+
+      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+    } elseif ($_GET['t_filter'] == 'tomorrow') {
+      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY)');
+      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+    } elseif ($_GET['t_filter'] == 'overdue') {
+      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL < -1 DAY)');
+      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+    }
+  }
+
+
+  // Обработка формы входа
   if (isset($_POST['login_btn'])) {
 
     $user = $_POST;
@@ -199,7 +283,7 @@
    }
   }
 
-
+  // Выход из сессии
   if (isset($_GET['exit'])) {
     session_destroy();
     header("Location: index.php");
@@ -211,6 +295,8 @@
   	'title' => 'Дела в Порядке',
     'task_list' => $task_list,
     'task_add' => $task_add,
+    'project' => $project,
+    'p_add' => $p_add,
     'auth_form' => $auth_form,
     'username' => $username,
     'register_form' => $register_form,

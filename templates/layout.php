@@ -8,9 +8,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add']) || $task_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
+<body <?php if (isset($_GET['add']) || $task_add || $p_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
 <?= $task_add; ?>
 <?= $auth_form; ?>
+<?= $p_add; ?>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 
@@ -62,8 +63,8 @@
                 } ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                      <li class="main-navigation__list-item <?php if ($_GET['category_id'] == 'all') :?>main-navigation__list-item--active<?php endif; ?>">
-                          <a class="main-navigation__list-item-link" href="index.php?category_id=all">Все</a>
+                      <li class="main-navigation__list-item <?php if ($_GET['category_id'] == 'all_p' || !isset($_GET['category_id'])) :?>main-navigation__list-item--active<?php endif; ?>">
+                          <a class="main-navigation__list-item-link" href="index.php?category_id=all_p">Все</a>
                           <span class="main-navigation__list-item-count"><?php echo count($task_list); ?></span>
                       </li>
                       <?php foreach ($categories as $key => $category) : ?>
@@ -75,7 +76,7 @@
                     </ul>
                 </nav>
 
-                <a class="button button--transparent button--plus content__side-button" href="#">Добавить проект</a>
+                <a class="button button--transparent button--plus content__side-button" href="index.php?p_add">Добавить проект</a>
             </section>
           <?php elseif (isset($_GET['register']) || $register_form) : ?>
             <section class="content__side">

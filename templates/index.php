@@ -8,10 +8,10 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="index.php?t_filter=all" class="tasks-switch__item <?php if ($_GET['t_filter'] == 'all' || !isset($_GET['t_filter'])) : ?>tasks-switch__item--active<? endif; ?>">Все задачи</a>
+        <a href="index.php?t_filter=today" class="tasks-switch__item <?php if ($_GET['t_filter'] == 'today') : ?>tasks-switch__item--active<? endif; ?>">Повестка дня</a>
+        <a href="index.php?t_filter=tomorrow" class="tasks-switch__item <?php if ($_GET['t_filter'] == 'tomorrow') : ?>tasks-switch__item--active<? endif; ?>">Завтра</a>
+        <a href="index.php?t_filter=overdue" class="tasks-switch__item <?php if ($_GET['t_filter'] == 'overdue') : ?>tasks-switch__item--active<? endif; ?>">Просроченные</a>
     </nav>
 
     <label class="checkbox">
@@ -35,7 +35,7 @@
         </td>
 
         <td class="task__file">
-            <a class="download-link" href="#"></a>
+            <?php if (isset($path)) : ?><a class="download-link" href="<?=$path;?>"></a><?php endif; ?>
         </td>
 
         <td class="task__date">
