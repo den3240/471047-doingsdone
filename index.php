@@ -27,7 +27,7 @@
       $show_complete_tasks = 1;
     }
     setcookie("showcompl", $show_complete_tasks, time()+3600, "/");
-    header('Location:' . $_SERVER["HTTP_REFERER"]);
+    header('Location:' . $_SERVER["HTTP_REFERER"]); 
   }
 
   $page_content = include_template('templates/guest.php', []);
