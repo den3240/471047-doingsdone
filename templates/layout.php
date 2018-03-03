@@ -63,7 +63,7 @@
                 } ?>
                 <nav class="main-navigation">
                     <ul class="main-navigation__list">
-                      <li class="main-navigation__list-item <?php if ($_GET['category_id'] == 'all_p' || !isset($_GET['category_id'])) :?>main-navigation__list-item--active<?php endif; ?>">
+                      <li class="main-navigation__list-item <?php if ((isset($_GET['category_id']) && $_GET['category_id'] == 'all_p') || !isset($_GET['category_id'])) :?>main-navigation__list-item--active<?php endif; ?>">
                           <a class="main-navigation__list-item-link" href="index.php?category_id=all_p">Все</a>
                           <span class="main-navigation__list-item-count"><?php echo count($task_list); ?></span>
                       </li>
