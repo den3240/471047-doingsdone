@@ -36,14 +36,28 @@
       $active_session = isset($_SESSION['user_valid']);
 
 
-      if($task_result = mysqli_query($con, 'SELECT * FROM tasks WHERE `user_id` = '.$user_id.'')) {
+      // Выборка заданий
+      $sql = 'SELECT * FROM tasks WHERE `user_id` = ?';
+      $res = mysqli_prepare($con, $sql);
+      $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+      mysqli_stmt_execute($stmt);
+      $task_result = mysqli_stmt_get_result($stmt);
+
+      if($task_result) {
         $task_list = mysqli_fetch_all($task_result, MYSQLI_ASSOC);
       } else {
         $error = mysqli_error($con);
         $content = include_template('templates/error.php', ['error' => $error]);
       }
 
-      if ($categ_result = mysqli_query($con, 'SELECT `id`, `name` FROM projects WHERE `user_id` = '.$user_id.'')) {
+      // Выборка проектов
+      $sql = 'SELECT `id`, `name` FROM projects WHERE `user_id` = ?';
+      $res = mysqli_prepare($con, $sql);
+      $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+      mysqli_stmt_execute($stmt);
+      $categ_result = mysqli_stmt_get_result($stmt);
+
+      if ($categ_result) {
           $categories = mysqli_fetch_all($categ_result, MYSQLI_ASSOC);
       } else {
           $error = mysqli_error($con);
