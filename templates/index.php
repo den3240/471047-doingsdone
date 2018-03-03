@@ -25,12 +25,12 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if(($show_complete_tasks == 1 && $task['status'] === 'Да') || $task['status'] === "Нет"): ?>
-    <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['date'])) :?>task--important<?php endif; ?>">
+    <?php if(($show_complete_tasks == 1 && $task['complete_date'] !== NULL) || $task['complete_date'] === NULL): ?>
+    <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['status'] === 'Да') :?>checked<?php endif; ?>>
-                <span class="checkbox__text"><?= htmlspecialchars($task['title']); ?></span>
+                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
+                <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
             </label>
         </td>
 
@@ -40,10 +40,10 @@
 
         <td class="task__date">
           <?php
-            if(!$task['date']) {
+            if(!$task['deadline']) {
               echo "Нет";
             }else{
-              echo htmlspecialchars($task['date']);
+              echo htmlspecialchars(date('d.m.y', strtotime($task['deadline'])));
             }
           ?>
         </td>
