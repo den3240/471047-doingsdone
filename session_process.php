@@ -62,7 +62,7 @@ if (isset($_GET['category_id'])) {
           $filtered_tasks = array_filter($task_list, function($element) use ($filter_category) {
             return $element['project_id'] == $filter_category;
           });
-          $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filtered_tasks, 'file_path' => $file_path, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
         }
     }
   }
