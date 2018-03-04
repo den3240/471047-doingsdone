@@ -11,7 +11,7 @@
 
       <input class="form__input <?=$classname;?>" type="text" name="email" id="email" value="<?=$value;?>" placeholder="Введите e-mail">
       <?php if (isset($errors['email'])): ?>
-      <p class="form__message">Такой пользователь не найден</p>
+      <p class="form__message"><?=$errors['email']; ?></p>
       <?php endif; ?>
     </div>
 
@@ -22,7 +22,7 @@
 
       <input class="form__input <?=$classname;?>" type="password" name="password" id="password" value="<?=$value;?>" placeholder="Введите пароль">
       <?php if (isset($errors['password'])): ?>
-      <p class="form__message">Вы ввели неверный пароль</p>
+      <p class="form__message"><?=$errors['password']; ?></p>
       <?php endif; ?>
     </div>
 
