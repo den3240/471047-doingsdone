@@ -193,30 +193,36 @@
    }
   }
 
+  // Фильтрация заданий
   if ($_GET['t_filter'] != 'all') {
     if ($_GET['t_filter'] == 'today') {
-      // Робив фільтрацію завдань через вивід з DATABASE
-      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE()');
-      // $filter_day = mysqli_fetch_all($filter_result, MYSQLI_ASSOC);
-      // foreach ($categories as $key => $category) {
-      //   if ($_GET['category_id'] == $category['id']) {
-      //     $filter_category = $category['id'];
-      //     echo $filter_category;
-      //     $filtered_tasks = array_filter($filter_day, function($element) use ($filter_category) {
-      //       return $element['project_id'] == $filter_category;
-      //     });
-      //     print_r($filtered_tasks);
-      //   }
-      // }
+      $sql = 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE() AND `user_id` = ?';
+      $res = mysqli_prepare($con, $sql);
+      $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+      mysqli_stmt_execute($stmt);
+      $filter_day = mysqli_stmt_get_result($stmt);
+      if ($filter_day) {
+        $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+      }
 
-
-      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
     } elseif ($_GET['t_filter'] == 'tomorrow') {
-      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY)');
-      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+      $sql = 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY) AND `user_id` = ?';
+      $res = mysqli_prepare($con, $sql);
+      $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+      mysqli_stmt_execute($stmt);
+      $filter_day = mysqli_stmt_get_result($stmt);
+      if ($filter_day) {
+        $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+      }
     } elseif ($_GET['t_filter'] == 'overdue') {
-      $filter_day = mysqli_query($con, 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL < -1 DAY)');
-      $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+      $sql = 'SELECT * FROM `tasks` WHERE `deadline` < NOW() AND `user_id` = ?';
+      $res = mysqli_prepare($con, $sql);
+      $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+      mysqli_stmt_execute($stmt);
+      $filter_day = mysqli_stmt_get_result($stmt);
+      if ($filter_day) {
+        $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+      }
     }
   }
 
