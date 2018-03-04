@@ -8,9 +8,9 @@
   $task_add = '';
   $auth_form = '';
   $username = '';
-  $categories = '';
-  $task_list = '';
-  $project = '';
+  $categories = [];
+  $task_list = [];
+  $project = [];
   $p_add = '';
   $register_form = '';
   $error = '';
@@ -128,7 +128,7 @@
   if (isset($_POST['add_btn'])) {
 
     $task = $_POST;
-    $task_name = $_POST['name'];
+    $task_name = trim($_POST['name']);
     $task_category = $_POST['project'];
     $task_date = date("Y.m.d", strtotime($_POST['date']));
 
@@ -158,7 +158,6 @@
    if (count($errors)) {
      $task_add = include_template('templates/task_add.php', ['task' => $task, 'errors' => $errors, 'categories' => $categories, 'task_category' => $task_category]);
    } else {
-     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
        if ($_POST['date'] == '') {
          $sql = 'INSERT INTO `tasks` (`name`, `file`, `deadline`, `user_id`, `project_id`) VALUES (?, ?, NULL, ?, ?)';
          $stmt = db_get_prepare_stmt($con, $sql, [$task_name, $path, $user_id, $category_id]);
@@ -176,7 +175,6 @@
          echo $error;
          $page_content = include_template('templates/error.php', ['error' => $error]);
        }
-    }
    }
   }
 
@@ -191,17 +189,27 @@
   if (isset($_POST['proj_add_btn'])) {
 
     $project = $_POST;
-    $project_name = $_POST['name'];
+    $project_name = '';
+    if (isset($_POST['name'])) {
+      $project_name = trim($_POST['name']);
+    }
 
     $errors = [];
-    if (empty($_POST['name'])) {
-      $errors[$key] = 'Заполните это поле';
+    if (empty($project_name)) {
+      $errors['name'] = 'Заполните это поле';
+    } else {
+      foreach ($categories as $key => $category) {
+        if ($category['name'] == $project_name) {
+          $errors['name'] = 'Проект с таким именем уже есть';
+        }
+      }
     }
+
+
 
    if (count($errors)) {
      $task_add = include_template('templates/project_add.php', ['project' => $project, 'errors' => $errors]);
    } else {
-     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
        $sql = "INSERT INTO `projects` (`name`, `user_id`) VALUES (?, ?)";
        $stmt = db_get_prepare_stmt($con, $sql, [$project_name, $user_id]);
        $res = mysqli_stmt_execute($stmt);
@@ -212,7 +220,6 @@
          $error = mysqli_error($con);
          $page_content = include_template('templates/error.php', ['error' => $error]);
        }
-    }
    }
   }
 
@@ -329,7 +336,7 @@
     $new_user = $_POST;
     $new_user_email = $_POST['email'];
     $new_user_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-    $new_user_name = $_POST['name'];
+    $new_user_name = trim($_POST['name']);
 
     $required = ['email', 'password', 'name'];
     $errors = [];
@@ -349,7 +356,6 @@
    if (count($errors)) {
      $register_form = include_template('templates/register.php', ['new_user' => $new_user, 'errors' => $errors]);
    } else {
-     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
        $sql = "INSERT INTO `users` (`name`, `email`, `password`, `contacts`) VALUES (?, ?, ?, NULL)";
        $stmt = db_get_prepare_stmt($con, $sql, [$new_user_name, $new_user_email, $new_user_password]);
        $res = mysqli_stmt_execute($stmt);
@@ -359,7 +365,6 @@
          $error = mysqli_error($con);
          $page_content = include_template('templates/error.php', ['error' => $error]);
        }
-     }
    }
   }
 
