@@ -11,7 +11,7 @@
 
       <input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите название">
       <?php if (isset($errors['name'])): ?>
-        <p class="form__message">Заполните это поле</p>
+        <p class="form__message"><?=$errors['name']?></p>
       <?php endif; ?>
     </div>
 
@@ -29,7 +29,7 @@
         <?php endforeach; ?>
       </select>
       <?php if (isset($errors['project'])): ?>
-        <p class="form__message">Заполните это поле</p>
+        <p class="form__message"><?=$errors['project']?></p>
       <?php endif; ?>
     </div>
 
@@ -38,10 +38,7 @@
           $value = isset($task['date']) ? $task['date'] : ""; ?>
       <label class="form__label" for="date">Дата выполнения</label>
 
-      <input class="form__input form__input--date <?=$classname;?>" type="date" name="date" id="date" value="<?=$value;?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ">
-      <?php if (isset($errors['date'])): ?>
-        <p class="form__message">Заполните это поле</p>
-      <?php endif; ?>
+      <input class="form__input form__input--date <?=$classname;?>" type="date" name="date" id="date" value="<?=$value;?>" placeholder="Введите дату в формате ДД.ММ.ГГГГ" title="Введите дату в формате ДД.ММ.ГГГГ">
     </div>
 
     <div class="form__row">

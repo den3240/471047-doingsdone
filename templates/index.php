@@ -8,10 +8,10 @@
 
 <div class="tasks-controls">
     <nav class="tasks-switch">
-        <a href="/" class="tasks-switch__item tasks-switch__item--active">Все задачи</a>
-        <a href="/" class="tasks-switch__item">Повестка дня</a>
-        <a href="/" class="tasks-switch__item">Завтра</a>
-        <a href="/" class="tasks-switch__item">Просроченные</a>
+        <a href="index.php?t_filter=all<?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>" class="tasks-switch__item <?php if ((isset($_GET['t_filter']) && $_GET['t_filter'] == 'all') || !isset($_GET['t_filter'])) : ?>tasks-switch__item--active<?php endif; ?>">Все задачи</a>
+        <a href="index.php?t_filter=today<?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>" class="tasks-switch__item <?php if (isset($_GET['t_filter']) && $_GET['t_filter'] == 'today') : ?>tasks-switch__item--active<?php endif; ?>">Повестка дня</a>
+        <a href="index.php?t_filter=tomorrow<?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>" class="tasks-switch__item <?php if (isset($_GET['t_filter']) && $_GET['t_filter'] == 'tomorrow') : ?>tasks-switch__item--active<?php endif; ?>">Завтра</a>
+        <a href="index.php?t_filter=overdue<?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>" class="tasks-switch__item <?php if (isset($_GET['t_filter']) && $_GET['t_filter'] == 'overdue') : ?>tasks-switch__item--active<?php endif; ?>">Просроченные</a>
     </nav>
 
     <label class="checkbox">
@@ -25,17 +25,21 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
-    <?php if(($show_complete_tasks == 1 && $task['complete_date'] !== NULL) || $task['complete_date'] === NULL): ?>
-    <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
+    <?php if(($show_complete_tasks == 1 && !empty($task['complete_date'])) || empty($task['complete_date'])): ?>
+    <tr class="tasks__item task <?php if (!empty($task['complete_date'])) :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
-            <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
-                <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
-            </label>
+          <label class="checkbox task__checkbox">
+            <a href="index.php?set_done=<?=$task['id'];?><?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>">
+              <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
+              <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
+            </a>
+          </label>
         </td>
 
         <td class="task__file">
-            <a class="download-link" href="#"></a>
+          <?php foreach ($file_path as $key => $path) : ?>
+            <?php if ($path['id'] == $task['id'] && $path['file'] != NULL) : ?><a class="download-link" href="<?=$path['file'];?>"></a><?php endif; ?>
+          <?php endforeach; ?>
         </td>
 
         <td class="task__date">
