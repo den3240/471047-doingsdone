@@ -11,7 +11,7 @@
 
       <input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите название">
       <?php if (isset($errors['name'])): ?>
-        <p class="form__message">Заполните это поле</p>
+        <p class="form__message"><?=$errors['name']?></p>
       <?php endif; ?>
     </div>
 
@@ -29,7 +29,7 @@
         <?php endforeach; ?>
       </select>
       <?php if (isset($errors['project'])): ?>
-        <p class="form__message">Заполните это поле</p>
+        <p class="form__message"><?=$errors['project']?></p>
       <?php endif; ?>
     </div>
 

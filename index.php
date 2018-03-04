@@ -15,6 +15,11 @@
   $register_form = '';
   $error = '';
 
+  // Создаем список пользователь
+  $sql = 'SELECT `id`, `name`, `email`, `password` FROM users';
+  $result = mysqli_query($con, $sql);
+  $users_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
   if (isset($_COOKIE['showcompl'])) {
     $show_complete_tasks = $_COOKIE['showcompl'];
   } else {
@@ -131,6 +136,7 @@
     $task_name = trim($_POST['name']);
     $task_category = $_POST['project'];
     $task_date = date("Y.m.d", strtotime($_POST['date']));
+    $category_id = 0;
 
     foreach ($categories as $key => $category) {
       if ($task_category == $category['name']) {
@@ -144,6 +150,9 @@
       if (empty($_POST[$key])) {
         $errors[$key] = 'Заполните это поле';
       }
+   }
+   if (!$category_id) {
+     $errors['project'] = 'Проект не найден';
    }
 
    if (isset($_FILES['preview']['name'])) {
@@ -309,9 +318,6 @@
       }
    }
 
-   $sql = 'SELECT `id`, `name`, `email`, `password` FROM users';
-   $result = mysqli_query($con, $sql);
-   $users_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
    if ($user_valid = searchUserByEmail($user_email, $users_list)) {
      if (password_verify($user['password'], $user_valid['password'])) {
        $_SESSION['user_valid'] = $user_valid;
@@ -347,12 +353,11 @@
    }
    if (!filter_var($new_user_email, FILTER_VALIDATE_EMAIL)) {
      $errors['email'] = 'Email некорректный';
-   } elseif ($user_valid = searchUserByEmail($new_user_email, $users)) {
+   } elseif ($user_valid = searchUserByEmail($new_user_email, $users_list)) {
       $errors['email'] = 'Такое пользователь уже существует';
     } else {
      $new_user_email = $_POST['email'];
    }
-
    if (count($errors)) {
      $register_form = include_template('templates/register.php', ['new_user' => $new_user, 'errors' => $errors]);
    } else {

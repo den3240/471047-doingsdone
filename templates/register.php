@@ -8,7 +8,7 @@
 
       <input class="form__input <?=$classname;?>" type="text" name="email" id="email" value="<?=$value;?>" placeholder="Введите e-mail">
       <?php if (isset($errors['email'])): ?>
-      <p class="form__message">E-mail введён некорректно</p>
+      <p class="form__message"><?=$errors['email']?></p>
       <?php endif; ?>
     </div>
 
@@ -18,6 +18,9 @@
       <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
       <input class="form__input <?=$classname;?>" type="password" name="password" id="password" value="<?=$value;?>" placeholder="Введите пароль">
+      <?php if (isset($errors['email'])): ?>
+      <p class="form__message"><?=$errors['password']?></p>
+      <?php endif; ?>
     </div>
 
     <div class="form__row">
@@ -25,7 +28,10 @@
             $value = isset($new_user['name']) ? $new_user['name'] : ""; ?>
       <label class="form__label" for="name">Имя <sup>*</sup></label>
 
-      <input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите пароль">
+      <input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите имя">
+      <?php if (isset($errors['email'])): ?>
+      <p class="form__message"><?=$errors['name']?></p>
+      <?php endif; ?>
     </div>
 
     <div class="form__row form__row--controls">
