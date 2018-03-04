@@ -29,10 +29,12 @@
     <?php if(($show_complete_tasks == 1 && $task['complete_date'] !== NULL) || $task['complete_date'] === NULL): ?>
     <tr class="tasks__item task <?php if ($task_status === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
-            <label class="checkbox task__checkbox">
-                <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
-                <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
-            </label>
+          <label class="checkbox task__checkbox">
+            <a href="index.php?set_done=<?=$task['id'];?><?= isset($_GET['category_id']) ? '&category_id='.$_GET['category_id'] : '' ?>">
+              <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
+              <span class="checkbox__text"><?= htmlspecialchars($task['name']); ?></span>
+            </a>
+          </label>
         </td>
 
         <td class="task__file">

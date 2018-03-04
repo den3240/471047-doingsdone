@@ -218,34 +218,69 @@
 
   // Фильтрация заданий
   if (isset($_GET['t_filter'])) {
+    $t_filter = $_GET['t_filter'];
     if ($t_filter != 'all') {
       if ($t_filter == 'today') {
-        $sql = 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE() AND `user_id` = ?';
-        $res = mysqli_prepare($con, $sql);
-        $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
-        mysqli_stmt_execute($stmt);
-        $filter_day = mysqli_stmt_get_result($stmt);
-        if ($filter_day) {
-          $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+        if ($_GET['category_id'] == 'all_p' || !isset($_GET['category_id'])) {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE() AND `user_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
+        } else {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` = CURDATE() AND `user_id` = ? AND `project_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $_GET['category_id']]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
         }
 
       } elseif ($t_filter == 'tomorrow') {
-        $sql = 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY) AND `user_id` = ?';
-        $res = mysqli_prepare($con, $sql);
-        $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
-        mysqli_stmt_execute($stmt);
-        $filter_day = mysqli_stmt_get_result($stmt);
-        if ($filter_day) {
-          $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+        if ($_GET['category_id'] == 'all_p' || !isset($_GET['category_id'])) {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY) AND `user_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
+        } else {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` = ADDDATE(CURDATE(), INTERVAL 1 DAY) AND `user_id` = ? AND `project_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $_GET['category_id']]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
         }
       } elseif ($t_filter == 'overdue') {
-        $sql = 'SELECT * FROM `tasks` WHERE `deadline` < NOW() AND `user_id` = ?';
-        $res = mysqli_prepare($con, $sql);
-        $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
-        mysqli_stmt_execute($stmt);
-        $filter_day = mysqli_stmt_get_result($stmt);
-        if ($filter_day) {
-          $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+
+        if ($_GET['category_id'] == 'all_p' || !isset($_GET['category_id'])) {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` < NOW() AND `user_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
+        } else {
+          $sql = 'SELECT * FROM `tasks` WHERE `deadline` < NOW() AND `user_id` = ? AND `project_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $_GET['category_id']]);
+          mysqli_stmt_execute($stmt);
+          $filter_day = mysqli_stmt_get_result($stmt);
+          if ($filter_day) {
+            $page_content = include_template('templates/index.php', ['categories' => $categories, 'task_list' => $filter_day, 'show_complete_tasks' => $show_complete_tasks, 'username' => $_SESSION['user_valid']['name']]);
+          }
         }
       }
     }
@@ -326,6 +361,50 @@
        }
      }
    }
+  }
+
+  // Изменение состояния задания
+  if (isset($_GET['set_done'])) {
+    $task_id = $_GET['set_done'];
+    $sql = 'SELECT `complete_date` FROM tasks WHERE `user_id` = ? AND `id` = ?';
+    $res = mysqli_prepare($con, $sql);
+    $stmt = db_get_prepare_stmt($con, $sql, [$user_id, $task_id]);
+    mysqli_stmt_execute($stmt);
+    $res = mysqli_stmt_get_result($stmt);
+
+    if ($res) {
+      $task_compl_date = mysqli_fetch_all($res, MYSQLI_ASSOC);
+      foreach ($task_compl_date as $key => $compl_date) {
+        if ($compl_date['complete_date'] !== NULL) {
+          $sql = 'UPDATE `tasks` SET `complete_date` = NULL WHERE `id` = ? AND `user_id` = ?';
+          $stmt = db_get_prepare_stmt($con, $sql, [$task_id, $user_id]);
+          $res = mysqli_stmt_execute($stmt);
+
+          if ($res) {
+            header('Location:' . $_SERVER["HTTP_REFERER"]);
+          } else {
+            $error = mysqli_error($con);
+            $page_content = include_template('templates/error.php', ['error' => $error]);
+          }
+
+        } else {
+          $sql = 'UPDATE `tasks` SET `complete_date` = NOW() WHERE `id` = ? AND `user_id` = ?';
+          $res = mysqli_prepare($con, $sql);
+          $stmt = db_get_prepare_stmt($con, $sql, [$task_id, $user_id]);
+          $res = mysqli_stmt_execute($stmt);
+
+          if ($res) {
+            header('Location:' . $_SERVER["HTTP_REFERER"]);
+          } else {
+            $error = mysqli_error($con);
+            $page_content = include_template('templates/error.php', ['error' => $error]);
+          }
+        }
+      }
+    } else {
+      $error = mysqli_error($con);
+      $page_content = include_template('templates/error.php', ['error' => $error]);
+    }
   }
 
   // Выход из сессии
