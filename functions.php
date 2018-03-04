@@ -14,9 +14,6 @@ function include_template($path, $data) {
 
 
 function task_counting ($task_list = [], $project_id) {
-  if ($project_name == "Все"){
-    return count($task_list);
-  }
   $project_count = 0;
   foreach ($task_list as $key => $value) {
     if ($value['project_id'] == $project_id) {

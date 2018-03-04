@@ -25,8 +25,9 @@
 
 <table class="tasks">
   <?php foreach ($task_list as $key => $task): ?>
+    <?php $task_status = $task['status']; ?>
     <?php if(($show_complete_tasks == 1 && $task['complete_date'] !== NULL) || $task['complete_date'] === NULL): ?>
-    <tr class="tasks__item task <?php if ($task['status'] === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
+    <tr class="tasks__item task <?php if ($task_status === 'Да') :?>task--completed <?php elseif(date_check($task['deadline'])) :?>task--important<?php endif; ?>">
         <td class="task__select">
             <label class="checkbox task__checkbox">
                 <input class="checkbox__input visually-hidden" type="checkbox" <?php if ($task['complete_date'] !== NULL) :?>checked<?php endif; ?>>
@@ -35,7 +36,9 @@
         </td>
 
         <td class="task__file">
-            <?php if (isset($path)) : ?><a class="download-link" href="<?=$path;?>"></a><?php endif; ?>
+          <?php foreach ($file_path as $key => $path) : ?>
+            <?php if ($path['id'] == $task['id'] && $path['file'] != NULL) : ?><a class="download-link" href="<?=$path['file'];?>"></a><?php endif; ?>
+          <?php endforeach; ?>
         </td>
 
         <td class="task__date">
