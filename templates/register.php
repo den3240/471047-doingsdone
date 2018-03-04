@@ -18,7 +18,7 @@
       <label class="form__label" for="password">Пароль <sup>*</sup></label>
 
       <input class="form__input <?=$classname;?>" type="password" name="password" id="password" value="<?=$value;?>" placeholder="Введите пароль">
-      <?php if (isset($errors['email'])): ?>
+      <?php if (isset($errors['password'])): ?>
       <p class="form__message"><?=$errors['password']?></p>
       <?php endif; ?>
     </div>
@@ -29,7 +29,7 @@
       <label class="form__label" for="name">Имя <sup>*</sup></label>
 
       <input class="form__input <?=$classname;?>" type="text" name="name" id="name" value="<?=$value;?>" placeholder="Введите имя">
-      <?php if (isset($errors['email'])): ?>
+      <?php if (isset($errors['name'])): ?>
       <p class="form__message"><?=$errors['name']?></p>
       <?php endif; ?>
     </div>
