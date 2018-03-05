@@ -15,10 +15,6 @@
   $register_form = '';
   $error = '';
 
-  // Создаем список пользователь
-  $sql = 'SELECT `id`, `name`, `email`, `password` FROM users';
-  $result = mysqli_query($con, $sql);
-  $users_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
   // Проверяем наличие куки
   if (isset($_COOKIE['showcompl'])) {

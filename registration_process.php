@@ -1,4 +1,9 @@
 <?php
+// Создаем список пользователь
+$sql = 'SELECT `id`, `name`, `email`, `password` FROM users';
+$result = mysqli_query($con, $sql);
+$users_list = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
 $new_user = $_POST;
 $new_user_email = $_POST['email'];
 $new_user_password = password_hash($_POST['password'], PASSWORD_DEFAULT);
