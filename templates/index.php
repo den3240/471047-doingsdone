@@ -37,9 +37,7 @@
         </td>
 
         <td class="task__file">
-          <?php foreach ($file_path as $key => $path) : ?>
-            <?php if ($path['id'] == $task['id'] && $path['file'] != NULL) : ?><a class="download-link" href="<?=$path['file'];?>"></a><?php endif; ?>
-          <?php endforeach; ?>
+            <?php if (!empty($task['file'])) : ?><a class="download-link" href="<?=$task['file'];?>"></a><?php endif; ?>
         </td>
 
         <td class="task__date">
