@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body <?php if (isset($_GET['add']) || $task_add || $p_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
+<body <?php if (isset($_GET['add']) || $task_add || $project_add || $auth_form || isset($_GET['login']) && !isset($_SESSION['user_valid'])) : ?>class="overlay"<?php endif; ?> >
 <?= $task_add; ?>
 <?= $auth_form; ?>
-<?= $p_add; ?>
+<?= $project_add; ?>
 
 <h1 class="visually-hidden">Дела в порядке</h1>
 
@@ -72,7 +72,7 @@
                     </ul>
                 </nav>
 
-                <a class="button button--transparent button--plus content__side-button" href="index.php?p_add">Добавить проект</a>
+                <a class="button button--transparent button--plus content__side-button" href="index.php?project_add">Добавить проект</a>
             </section>
           <?php elseif (isset($_GET['register']) || $register_form) : ?>
             <section class="content__side">

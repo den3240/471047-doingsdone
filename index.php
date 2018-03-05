@@ -11,7 +11,7 @@
   $categories = [];
   $task_list = [];
   $project = [];
-  $p_add = '';
+  $project_add = '';
   $register_form = '';
   $error = '';
 
@@ -67,9 +67,9 @@
   }
 
   // Показываем форму добавление проекта
-  if (isset($_GET['p_add']) && isset($_SESSION['user_valid'])) {
-    $p_add = include_template('templates/project_add.php', ['project' => [], 'errors' => [], 'username' => $_SESSION['user_valid']['name']]);
-  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['p_add'])) {
+  if (isset($_GET['project_add']) && isset($_SESSION['user_valid'])) {
+    $project_add = include_template('templates/project_add.php', ['project' => [], 'errors' => [], 'username' => $_SESSION['user_valid']['name']]);
+  } elseif (!isset($_SESSION['user_valid']) && isset($_GET['project_add'])) {
     $auth_form = include_template('templates/auth_form.php', ['errors' => []]);
   }
 
@@ -111,7 +111,7 @@
     'task_list' => $task_list,
     'task_add' => $task_add,
     'project' => $project,
-    'p_add' => $p_add,
+    'project_add' => $project_add,
     'auth_form' => $auth_form,
     'username' => $username,
     'register_form' => $register_form,
